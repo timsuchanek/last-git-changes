@@ -1,6 +1,6 @@
 {
   "name": "last-git-changes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "bin.js",
   "bin": {
@@ -16,7 +16,7 @@
     "dist"
   ],
   "keywords": [],
-  "author": "",
+  "author": "Tim Suchanek <suchanek@prisma.io>",
   "license": "MIT",
   "devDependencies": {
     "@types/micromatch": "^3.1.1",

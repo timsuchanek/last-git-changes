@@ -91,10 +91,14 @@ last-git-changes --exclude='README.md,docs' --dir .`)
 
   const changes = await getLatestChanges(dir)
   if (exclude.length === 0) {
-    console.log(changes.join('\n'))
+    if (changes.length > 0) {
+      console.log(changes.join('\n'))
+    }
   } else {
     const filteredChanges = micromatch.not(changes, exclude)
-    console.log(filteredChanges.join('\n'))
+    if (filteredChanges.length > 0) {
+      console.log(filteredChanges.join('\n'))
+    }
   }
 }
 
