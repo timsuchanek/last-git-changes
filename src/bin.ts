@@ -2,6 +2,7 @@ import execa from 'execa'
 import chalk from 'chalk'
 import path from 'path'
 import arg from 'arg'
+import micromatch from 'micromatch'
 
 export type Commit = {
   date: Date
@@ -9,6 +10,13 @@ export type Commit = {
   hash: string
   isMergeCommit: boolean
   parentCommits: string[]
+}
+
+async function getLatestChanges(dir: string): Promise<string[]> {
+  const commit = await getLatestCommit(dir)
+  console.log(commit)
+
+  return getChangesFromCommit(commit)
 }
 
 async function getLatestCommit(dir: string): Promise<Commit> {
@@ -56,6 +64,7 @@ async function getChangesFromCommit(commit: Commit): Promise<string[]> {
     commit.dir,
     `git diff-tree --no-commit-id --name-only -r ${hashes}`,
   )
+  console.log(changes)
   if (changes.trim().length > 0) {
     return changes.split('\n').map(change => path.join(commit.dir, change))
   } else {
@@ -67,12 +76,27 @@ async function main() {
   const args = arg({
     '--dir': String,
     '--exclude': String,
+    '--help': Boolean,
+    '-h': '--help',
   })
 
-  if (!args['--exclude']) {
+  if (args['--help']) {
     console.log(`Usage:
 last-git-changes --exclude='README.md,docs' --dir .`)
     process.exit(1)
+  }
+
+  const dir = args['--dir'] || process.cwd()
+  const excludeArg = args['--exclude']
+  const exclude =
+    excludeArg && excludeArg.length > 0 ? excludeArg.split(',') : []
+
+  const changes = await getLatestChanges(dir)
+  if (exclude.length === 0) {
+    console.log(changes.join('\n'))
+  } else {
+    const filteredChanges = micromatch(changes, exclude)
+    console.log(filteredChanges)
   }
 }
 

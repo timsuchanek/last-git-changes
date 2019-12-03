@@ -4,15 +4,26 @@ dependencies:
   execa: 3.4.0
   micromatch: 4.0.2
 devDependencies:
+  '@types/micromatch': 3.1.1
   '@types/node': 12.12.14
   ts-node: 8.5.4_typescript@3.7.2
   typescript: 3.7.2
 lockfileVersion: 5.1
 packages:
+  /@types/braces/3.0.0:
+    dev: true
+    resolution:
+      integrity: sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
   /@types/color-name/1.1.1:
     dev: false
     resolution:
       integrity: sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+  /@types/micromatch/3.1.1:
+    dependencies:
+      '@types/braces': 3.0.0
+    dev: true
+    resolution:
+      integrity: sha512-Wr5y4uv3r7JP4jEUqv7rZeYiMBGRHcbojDVsl11wq6gw1v/ZZQvJexd9rtvVx3EIVqw8dwtcRjSs8m2DV9qHjQ==
   /@types/node/12.12.14:
     dev: true
     resolution:
@@ -311,6 +322,7 @@ packages:
     resolution:
       integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 specifiers:
+  '@types/micromatch': ^3.1.1
   '@types/node': ^12.12.14
   arg: ^4.1.2
   chalk: ^3.0.0
