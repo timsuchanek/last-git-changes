@@ -8,3 +8,7 @@ Prints the changed files of the last git commit, including globbing support with
 $ npm install -g last-git-changes
 $ last-git-changes --exclude='README.md,docs'
 ```
+
+## License
+
+MIT
