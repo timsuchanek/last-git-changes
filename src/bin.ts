@@ -93,12 +93,13 @@ last-git-changes --exclude='README.md,docs' --dir .`)
   if (exclude.length === 0) {
     console.log(changes.join('\n'))
   } else {
-    console.log({ changes, exclude })
     const filteredChanges = micromatch.not(changes, exclude)
     console.log(filteredChanges.join('\n'))
   }
 }
 
+// As recommended here https://github.com/micromatch/micromatch/issues/162#issuecomment-507959634
+// In order to get the gitignore behavior
 function prefixStar(pattern: string) {
   if (pattern.startsWith('**')) {
     return pattern
