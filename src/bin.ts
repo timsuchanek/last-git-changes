@@ -14,7 +14,6 @@ export type Commit = {
 
 async function getLatestChanges(dir: string): Promise<string[]> {
   const commit = await getLatestCommit(dir)
-  console.log(commit)
 
   return getChangesFromCommit(commit)
 }
@@ -64,7 +63,6 @@ async function getChangesFromCommit(commit: Commit): Promise<string[]> {
     commit.dir,
     `git diff-tree --no-commit-id --name-only -r ${hashes}`,
   )
-  console.log(changes)
   if (changes.trim().length > 0) {
     return changes.split('\n').map(change => path.join(commit.dir, change))
   } else {
@@ -86,7 +84,7 @@ last-git-changes --exclude='README.md,docs' --dir .`)
     process.exit(1)
   }
 
-  const dir = args['--dir'] || process.cwd()
+  const dir = args['--dir'] || './'
   const excludeArg = args['--exclude']
   const exclude =
     excludeArg && excludeArg.length > 0 ? excludeArg.split(',') : []
@@ -95,8 +93,11 @@ last-git-changes --exclude='README.md,docs' --dir .`)
   if (exclude.length === 0) {
     console.log(changes.join('\n'))
   } else {
-    const filteredChanges = micromatch(changes, exclude)
-    console.log(filteredChanges)
+    console.log({ changes, exclude })
+    const filteredChanges = micromatch.not(changes, exclude, {
+      basename: false,
+    })
+    console.log(filteredChanges.join('\n'))
   }
 }
 
