@@ -86,19 +86,27 @@ last-git-changes --exclude='README.md,docs' --dir .`)
 
   const dir = args['--dir'] || './'
   const excludeArg = args['--exclude']
-  const exclude =
-    excludeArg && excludeArg.length > 0 ? excludeArg.split(',') : []
+  let exclude = excludeArg && excludeArg.length > 0 ? excludeArg.split(',') : []
+  exclude = exclude.map(prefixStar)
 
   const changes = await getLatestChanges(dir)
   if (exclude.length === 0) {
     console.log(changes.join('\n'))
   } else {
     console.log({ changes, exclude })
-    const filteredChanges = micromatch.not(changes, exclude, {
-      basename: false,
-    })
+    const filteredChanges = micromatch.not(changes, exclude)
     console.log(filteredChanges.join('\n'))
   }
+}
+
+function prefixStar(pattern: string) {
+  if (pattern.startsWith('**')) {
+    return pattern
+  }
+  if (pattern.startsWith('*')) {
+    return '*' + pattern
+  }
+  return '**/' + pattern
 }
 
 main()
