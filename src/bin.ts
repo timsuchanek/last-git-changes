@@ -87,7 +87,7 @@ last-git-changes --exclude='README.md,docs' --dir .`)
   const dir = args['--dir'] || './'
   const excludeArg = args['--exclude']
   let exclude = excludeArg && excludeArg.length > 0 ? excludeArg.split(',') : []
-  exclude = exclude.map(prefixStar)
+  exclude = flatten(exclude.map(prefixStar))
 
   const changes = await getLatestChanges(dir)
   if (exclude.length === 0) {
@@ -102,16 +102,22 @@ last-git-changes --exclude='README.md,docs' --dir .`)
   }
 }
 
+function flatten<T>(arr: T[][]): T[] {
+  return arr.reduce((acc, val) => acc.concat(val), [])
+}
+
 // As recommended here https://github.com/micromatch/micromatch/issues/162#issuecomment-507959634
 // In order to get the gitignore behavior
-function prefixStar(pattern: string) {
+function prefixStar(pattern: string): string[] {
+  const additionalPattern = `${pattern}/**/*`
+
   if (pattern.startsWith('**')) {
-    return pattern
+    return [pattern, additionalPattern]
   }
   if (pattern.startsWith('*')) {
-    return '*' + pattern
+    return ['*' + pattern, additionalPattern]
   }
-  return '**/' + pattern
+  return ['**/' + pattern, additionalPattern]
 }
 
 main()
